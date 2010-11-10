@@ -9,4 +9,11 @@ setup(
   license="GPLv2",
   description="A Generic plug-in system for python",
   author="Dalton Barreto",
-  packages=['plugnplay'])
+  author_email="daltonmatos@gmail.com",
+  long_description=file('README').read(),
+  packages=['plugnplay'],
+  classifiers = [
+    "License :: OSI Approved :: GNU General Public License (GPL)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python"
+    ])
