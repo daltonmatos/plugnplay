@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import sys
+
 '''
 
 == Examples ===
@@ -36,9 +38,10 @@ from shutil import copy
 from glob import glob
 from interfaces import HashChecker
 
+from plugins import *
 
 if len(sys.argv) <= 1:
-  print "Need one parameter, the file to duplicate"
+  sys.stdout.write("Need one parameter, the file to duplicate\n")
   sys.exit(1)
 
 
@@ -55,16 +58,17 @@ where_to_duplicate = '/tmp/duplicate'
 original_file = sys.argv[1]
 
 if not os.path.exists(original_file):
-  print "Original file does not exist: %s" % original_file
-  print "Exiting..."
+  sys.stdout.write("Original file does not exist: %s\n" % original_file)
+  sys.stdout.write("Exiting...\n")
   sys.exit(1)
 
 copy(original_file, where_to_duplicate)
 
 for listener in HashChecker.implementors():
+  sys.stdout.write("Running copy checker %s\n" % repr(listener))
   if not listener.check(original_file, where_to_duplicate):
-    print "Copy failed. Checksum Error"
+    sys.stdout.write("Copy failed. Checksum Error\n")
     sys.exit(1)
 
 
-print "Copy done!"
+sys.stdout.write("Copy done!\n")

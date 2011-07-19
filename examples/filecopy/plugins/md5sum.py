@@ -18,10 +18,10 @@ class MD5(Plugin):
 
 
   def check(self, file1, file2):
-    md5_1 = hashlib.md5(file(file1).read()).hexdigest()
-    md5_2 = hashlib.md5(file(file2).read()).hexdigest()
+    md5_1 = hashlib.md5(open(file1, encoding='utf-8').read().encode('utf-8')).hexdigest()
+    md5_2 = hashlib.md5(open(file2, encoding='utf-8').read().encode('utf-8')).hexdigest()
     if md5_1 == md5_2:
-      print "MD5sum OK: %s" % md5_1
+      sys.stdout.write("MD5sum OK: %s\n" % md5_1)
       return True
     else:
       return False

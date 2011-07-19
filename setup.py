@@ -11,7 +11,7 @@ setup(
   author="Dalton Barreto",
   author_email="daltonmatos@gmail.com",
   long_description=open('README').read(),
-  packages=['plugnplay', 'examples', 'examples.filecopy'],
+  packages=['plugnplay'],
   classifiers = [
     "License :: OSI Approved :: GNU General Public License (GPL)",
     "Operating System :: OS Independent",

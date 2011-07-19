@@ -3,7 +3,7 @@ from glob import glob
 from os.path import join, basename
 import sys
 
-from manager import *
+from .manager import *
 
 
 __version__ = "0.1"
@@ -32,16 +32,16 @@ class PluginMeta(type):
         bases, attrs)
     
     new_class_instance = new_class()
-    if attrs.has_key('implements'):
+    if 'implements' in attrs:
       for interface in attrs['implements']:
         man.add_implementor(interface, new_class_instance)
 
 
     return new_class
 
-class Plugin(object):
-  __metaclass__ = PluginMeta
-
+# Yes, it's not pretty but works ate the same time with
+# python2 and python3.
+Plugin = PluginMeta('Plugin', (object, ), {})
 
 def set_plugin_dirs(*dirs):
   for dir in dirs:

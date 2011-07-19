@@ -18,10 +18,10 @@ class SHA1(Plugin):
 
 
   def check(self, file1, file2):
-    sha1_1 = hashlib.sha1(file(file1).read()).hexdigest()
-    sha1_2 = hashlib.sha1(file(file2).read()).hexdigest()
+    sha1_1 = hashlib.sha1(open(file1, encoding='utf-8').read().encode('utf-8')).hexdigest()
+    sha1_2 = hashlib.sha1(open(file2, encoding='utf-8').read().encode('utf-8')).hexdigest()
     if sha1_1 == sha1_2:
-      print "SHA-1 OK: %s" % sha1_1
+      sys.stdout.write("SHA-1 OK: %s\n" % sha1_1)
       return True
     else:
       return False
