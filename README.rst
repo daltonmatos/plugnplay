@@ -69,6 +69,19 @@ And an example of one such listener would be:
         if md5_1 is not md5_2:
           # Do something very useful! =)
 
+New in version 0.4
+******************
+
+Since plugnplay version 0.4 you can call your Interface method directly, like this:
+
+:: 
+
+    CopyListener.copy_finished(file1, file2)
+
+This line will call the ``copy_finished`` method of all objects that implement the ``CopyListener`` interface.
+This is speciallt iseful when you just want to call all listeners, but do not have any interest on their return value.
+
+
 Conclusion
 **********
 
