@@ -1,2 +1,1 @@
-#from . import md5sum
-#from . import sha1sum
+# Is this really needed for plugnplay?

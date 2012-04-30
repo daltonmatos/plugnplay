@@ -1,19 +1,13 @@
+import hashlib
 import sys
 
-# We have to do this so we can use HashChecker without
-# Installing this example with python setup install
-#dirname = os.path.dirname(os.path.abspath(__file__))
-#up_dir =  os.path.dirname(dirname)
-#sys.path.append(up_dir)
 
 from interfaces import HashChecker
 import plugnplay
 
-import hashlib
 
 class SHA256(plugnplay.Plugin):
     implements = [HashChecker]
-
 
     def _readFile(self, fName):
         """
@@ -26,6 +20,9 @@ class SHA256(plugnplay.Plugin):
 
 
     def check(self, file1, file2):
+        """
+        implement the check method enforced in the Interface
+        """
         sha1_1 = hashlib.sha256(self._readFile(file1)).hexdigest()
         sha1_2 = hashlib.sha256(self._readFile(file2)).hexdigest()
         if sha1_1 == sha1_2:
