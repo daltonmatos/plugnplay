@@ -11,7 +11,7 @@ class SHA256(plugnplay.Plugin):
 
     def _readFile(self, fName):
         """
-        Some work around code, to handle python versions that don't all specifying encoding in the open statement
+        Some work around code, to handle python versions that don't allow specifying encoding in the open statement
         """
         try:
             return open(fName, encoding='utf-8').read().encode('utf-8')
