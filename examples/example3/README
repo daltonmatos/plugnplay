@@ -12,12 +12,7 @@ Here is what is needed to run it.
  * cd to the examples/example3/filecopy folder: cd examples/example3/filecopy
  * Then, run the main.py file: 
     python main.py <file-to-copy>
- * You will see this output:
-    Copy done!
- * Now, run it with a different command line:
-   PLUGIN_DIR=plugins python main.py <file-to-copy>
- * And see that the output is quite different. Thats why the plugins were called.
 
 
-Now take a look at the code to see how easy is to add another plugin and as an exercise for you I will ask you to implement another HashChecker plugin, now for sha-256. Save your new plugin inside the plugins folder and re-run the program to see your brand new plugin in action!
+Now take a look at the code to see how easy is to add another plugin!  You may implement another HashChecker plugin, i.e. sha-512. Save your new plugin inside the plugins folder and re-run the program to see your brand new plugin in action!
    
