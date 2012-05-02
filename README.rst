@@ -9,7 +9,7 @@ you can dynamically retrieve who are the classes that implement a certain Interf
 the specific methods.
 
 A simple example
-**********************
+****************
 
 Think this way: You have e very simple program that just copy files around.
 
@@ -26,7 +26,7 @@ to the main code.
 PnP is roughly a implementation of the Observer pattern (http://en.wikipedia.org/wiki/Observer_pattern). 
  
 The code for this example
-**************
+*************************
 
 Ok, too much talk, now some code. A pseudo-code to the example above would be:
 
