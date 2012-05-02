@@ -1,0 +1,19 @@
+
+How to run this example
+***********************
+
+Here is a simple example demonstrating plugnplay (r0.4) in action. This example implements the simple program of the main README file. It's a copy-file program.
+
+Here is what is needed to run it.
+ 
+ * First install plugnplay. 
+	easy_install plugnplay==0.4
+	OR
+	pip install plugnplay==0.4
+ * cd to the examples/example4/filecopy folder: cd examples/example3/filecopy
+ * Then, run the main.py file: 
+    python main.py <file-to-copy>
+
+
+Now take a look at the code to see how easy is to add another plugin!  You may implement another HashChecker plugin, i.e. sha-512. Save your new plugin inside the plugins folder and re-run the program to see your brand new plugin in action!
+   

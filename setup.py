@@ -10,9 +10,9 @@ setup(
   description="A Generic plug-in system for python",
   author="Dalton Barreto",
   author_email="daltonmatos@gmail.com",
-  long_description=open('README').read(),
+  long_description=open('README.rst').read(),
   packages=['plugnplay'],
-  classifiers = [
+  classifiers=[
     "License :: OSI Approved :: GNU General Public License (GPL)",
     "Operating System :: OS Independent",
     "Programming Language :: Python",

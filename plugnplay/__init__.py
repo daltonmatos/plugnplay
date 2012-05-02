@@ -2,11 +2,11 @@
 from glob import glob
 from os.path import join, basename
 import sys
+from types import FunctionType
 
-from .manager import *
+from .manager import Manager
 
-
-__version__ = "0.3"
+__version__ = "0.4"
 
 __all__ = ['Interface', 'Plugin']
 
@@ -16,14 +16,30 @@ man = Manager()
 plugin_dirs = []
 
 
-class Interface(object):
+def _is_method(o):
+    return type(o) is FunctionType
+
+
+def method_name(method_name):
+    def _auto_caller_template(cls, *args, **kwargs):
+        for impl in cls.implementors():
+            method = getattr(impl, method_name)
+            method(*args, **kwargs)
+    return _auto_caller_template
+
+
+class InterfaceMeta(type):
     '''
     Marker for public interfaces
     '''
 
-    @classmethod
-    def implementors(cls):
-        return man.implementors(cls)
+    def __new__(metaclass, classname, bases, attrs):
+        new_class = super(InterfaceMeta, metaclass).__new__(metaclass, classname, bases, attrs)
+        for k, v in new_class.__dict__.iteritems():
+            if _is_method(v):
+                setattr(new_class, k, classmethod(method_name(k)))
+
+        return new_class
 
 
 class PluginMeta(type):
@@ -37,19 +53,25 @@ class PluginMeta(type):
             for interface in attrs['implements']:
                 man.add_implementor(interface, new_class_instance)
 
-
         return new_class
+
+
+@classmethod
+def implementors(cls):
+    return man.implementors(cls)
 
 # Yes, it's not pretty but works ate the same time with
 # python2 and python3.
 Plugin = PluginMeta('Plugin', (object, ), {})
+Interface = InterfaceMeta('Interface', (object, ), {'implementors': implementors})
+
 
 def set_plugin_dirs(*dirs):
     for d in dirs:
         plugin_dirs.append(d)
 
 
-def load_plugins(logger = None):
+def load_plugins(logger=None):
     '''
     The logger is any object with a "debug" method. Compatible
     with a logger as returned by the logging package.
