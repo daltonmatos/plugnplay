@@ -75,3 +75,19 @@ class LoadingTest(unittest.TestCase):
         mod2 = sys.modules[dir2_norm + '.otherplugin']
         print mod2
         self.assertTrue(mod2.MyPlugin.dir2)
+
+    def test_find_implementors_different_import(self):
+        import sys
+        import os
+        sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+        from interfaces import myinterface
+        import interfaces
+
+        class MyImplementor(plugnplay.Plugin):
+
+            implements = [myinterface.MyInterface]
+
+            pass
+
+        self.assertEquals(1, len(myinterface.MyInterface.implementors()))
+        self.assertEquals(1, len(interfaces.myinterface.MyInterface.implementors()))
