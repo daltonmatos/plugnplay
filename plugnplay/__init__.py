@@ -71,13 +71,20 @@ def set_plugin_dirs(*dirs):
         plugin_dirs.append(d)
 
 
+def normalize_path(path):
+    if path:
+        parts = filter(None, path.replace('.', '').split('/'))
+        return '.'.join(parts)
+    return None
+
+
 def load_plugins(logger=None):
     '''
     The logger is any object with a "debug" method. Compatible
     with a logger as returned by the logging package.
     '''
     for d in plugin_dirs:
-        sys.path.append(d)
+        sys.path.insert(0, d)
         py_files = glob(join(d, '*.py'))
 
         #Remove ".py" for proper importing
@@ -86,7 +93,8 @@ def load_plugins(logger=None):
             try:
                 imported_module = __import__(mod_name, globals=globals(), \
                     locals=locals())
-                sys.modules[mod_name] = imported_module
+                sys.modules[normalize_path(d) + "." + mod_name] = imported_module
+                del sys.modules[mod_name]
             except:
                 if logger:
                     logger.debug("Error loading plugin: {0}".format(mod_name), exc_info=sys.exc_info())
