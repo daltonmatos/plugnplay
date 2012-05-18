@@ -8,7 +8,7 @@ class LoadingTest(unittest.TestCase):
 
     def setUp(self):
         self.basepath = dirname(abspath(__file__))
-        self.full_path =  join(self.basepath, 'plugin/')
+        self.full_path = join(self.basepath, 'plugin/')
         plugnplay.plugin_dirs = []
 
     def test_add_plugin_path(self):
@@ -30,7 +30,7 @@ class LoadingTest(unittest.TestCase):
         plugnplay.load_plugins()
 
         self.assertTrue('someplugin' in sys.modules)
-        import someplugin #Test de importing of the new plugin
+        import someplugin  # Test de importing of the new plugin
         self.assertTrue(someplugin.SomePlugin is not None)
         p = someplugin.SomePlugin()
         self.assertTrue(isinstance(p, someplugin.SomePlugin))
@@ -39,7 +39,7 @@ class LoadingTest(unittest.TestCase):
         import sys
         plugnplay.set_plugin_dirs(join(self.basepath, 'wrong-plugins/'))
         mock_logger = Mock()
-        plugnplay.load_plugins(logger = mock_logger)
+        plugnplay.load_plugins(logger=mock_logger)
         self.assertEquals(1, mock_logger.debug.call_count)
         call_args = mock_logger.debug.call_args
         self.assertEquals("Error loading plugin: myplugin",  call_args[0][0])
@@ -47,3 +47,9 @@ class LoadingTest(unittest.TestCase):
         self.assertTrue(call_args[1]['exc_info'] is not None)
         self.assertTrue('myplugin' not in sys.modules)
         self.assertTrue('otherplug' in sys.modules)
+
+    def test_normalize_path(self):
+        self.assertEquals('some.module.path', plugnplay.normalize_path('/some/module/path'))
+        self.assertEquals('other.module.path', plugnplay.normalize_path('./other/module/path'))
+        self.assertEquals('some.module.path', plugnplay.normalize_path('../..//some//module/path'))
+        self.assertEquals('some.module.path', plugnplay.normalize_path('/some/../module/path/'))

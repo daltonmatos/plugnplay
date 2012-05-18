@@ -71,6 +71,13 @@ def set_plugin_dirs(*dirs):
         plugin_dirs.append(d)
 
 
+def normalize_path(path):
+    if path:
+        parts = filter(None, path.replace('.', '').split('/'))
+        return '.'.join(parts)
+    return None
+
+
 def load_plugins(logger=None):
     '''
     The logger is any object with a "debug" method. Compatible
