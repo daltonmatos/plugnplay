@@ -2,6 +2,7 @@ import unittest
 import plugnplay
 from os.path import dirname, join, abspath
 from mock import Mock
+import sys
 
 
 class LoadingTest(unittest.TestCase):
@@ -23,7 +24,6 @@ class LoadingTest(unittest.TestCase):
             pass
 
     def test_load_external_py_file(self):
-        import sys
         self.assertFalse(plugnplay.normalize_path(self.full_path) + '.someplugin' in sys.modules)
 
         plugnplay.set_plugin_dirs(self.full_path)
@@ -75,3 +75,39 @@ class LoadingTest(unittest.TestCase):
         mod2 = sys.modules[dir2_norm + '.otherplugin']
         print mod2
         self.assertTrue(mod2.MyPlugin.dir2)
+
+    def test_find_implementors_different_import(self):
+        import sys
+        import os
+        sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+        from interfaces import myinterface
+        import interfaces
+
+        class MyImplementor(plugnplay.Plugin):
+
+            implements = [myinterface.MyInterface]
+
+            pass
+
+        self.assertEquals(1, len(myinterface.MyInterface.implementors()))
+        self.assertEquals(1, len(interfaces.myinterface.MyInterface.implementors()))
+
+    def test_load_plugins_from_a_python_package(self):
+        """
+        See github issue #6.
+        """
+        from allinone.interface import AllInOne
+        import allinone
+        from allinone import interface
+        all_in_one_dir = join(self.basepath, 'allinone')
+        plugnplay.set_plugin_dirs(all_in_one_dir)
+        logger = Mock()
+        plugnplay.load_plugins(logger)
+
+        # Check that we did not try to load a plugin named __init__.
+        # See Github issue #9
+        self.assertEquals(0, logger.debug.call_count)
+        self.assertTrue(dirname(all_in_one_dir) in sys.path, "sys.path not modified correctly")
+        self.assertEquals(len(AllInOne.implementors()), 1)
+        self.assertEquals(len(allinone.interface.AllInOne.implementors()), 1)
+        self.assertEquals(len(interface.AllInOne.implementors()), 1)

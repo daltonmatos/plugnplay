@@ -1,6 +1,6 @@
 
 from glob import glob
-from os.path import join, basename
+from os.path import join, basename, exists, dirname
 import sys
 from types import FunctionType
 
@@ -28,6 +28,10 @@ def method_name(method_name):
     return _auto_caller_template
 
 
+def canonical_name(obj):
+    return "{0}.{1}".format(obj.__module__, obj.__name__)
+
+
 class InterfaceMeta(type):
     '''
     Marker for public interfaces
@@ -40,6 +44,15 @@ class InterfaceMeta(type):
                 setattr(new_class, k, classmethod(method_name(k)))
 
         return new_class
+
+    def __eq__(self, other):
+        return canonical_name(self) == canonical_name(other)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return hash(canonical_name(self))
 
 
 class PluginMeta(type):
@@ -78,23 +91,52 @@ def normalize_path(path):
     return None
 
 
+def _is_python_package(path):
+    return exists(join(path, '__init__.py'))
+
+
+def _import_from_python_package(package_module, module):
+    imported_module = __import__(package_module, globals=globals(), \
+        locals=locals(), fromlist=[module])
+    del sys.modules[package_module]
+    return imported_module
+
+
+def _import_directly(mod_name):
+    imported_module = __import__(mod_name, globals=globals(), \
+            locals=locals())
+    del sys.modules[mod_name]
+    return imported_module
+
+
+def _import_module(d, mod_name, logger=None):
+    try:
+        if _is_python_package(d):
+            _mod_name = "{0}.{1}".format(basename(d), mod_name)
+            imported_module = _import_from_python_package(_mod_name, mod_name)
+        else:
+            imported_module = _import_directly(mod_name)
+
+        sys.modules[normalize_path(d) + "." + mod_name] = imported_module
+    except:
+        if logger:
+            logger.debug("Error loading plugin: {0}".format(mod_name), exc_info=sys.exc_info())
+
+
 def load_plugins(logger=None):
     '''
     The logger is any object with a "debug" method. Compatible
     with a logger as returned by the logging package.
     '''
     for d in plugin_dirs:
-        sys.path.insert(0, d)
+        if not _is_python_package(d):
+            sys.path.insert(0, d)
+        else:
+            sys.path.insert(0, dirname(d))
+
         py_files = glob(join(d, '*.py'))
 
         #Remove ".py" for proper importing
         modules = [basename(filename[:-3]) for filename in py_files]
         for mod_name in modules:
-            try:
-                imported_module = __import__(mod_name, globals=globals(), \
-                    locals=locals())
-                sys.modules[normalize_path(d) + "." + mod_name] = imported_module
-                del sys.modules[mod_name]
-            except:
-                if logger:
-                    logger.debug("Error loading plugin: {0}".format(mod_name), exc_info=sys.exc_info())
+            _import_module(d, mod_name, logger=logger)
