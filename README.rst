@@ -69,6 +69,13 @@ And an example of one such listener would be:
         if md5_1 is not md5_2:
           # Do something very useful! =)
 
+
+New in version 0.4.1
+********************
+
+An important bugfix: There was a problem when the plugins were inside a regular python package. Thanks to Hugo Ribeiro (https://github.com/hugosenari) who reported it. The problem caused the implementors of an interface not to be correctly recorded for later retrieval in the code.
+More details: Issue #6 (https://github.com/daltonmatos/plugnplay/issues/6).
+
 New in version 0.4
 ******************
 
