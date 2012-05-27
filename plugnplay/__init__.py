@@ -6,7 +6,7 @@ from types import FunctionType
 
 from .manager import Manager
 
-__version__ = "0.4"
+__version__ = "0.4.1"
 
 __all__ = ['Interface', 'Plugin']
 
