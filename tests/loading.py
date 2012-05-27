@@ -91,3 +91,18 @@ class LoadingTest(unittest.TestCase):
 
         self.assertEquals(1, len(myinterface.MyInterface.implementors()))
         self.assertEquals(1, len(interfaces.myinterface.MyInterface.implementors()))
+
+    def test_plugins_at_the_same_package_as_the_implemented_interface(self):
+        """
+        See github issue #6.
+        """
+        from allinone.interface import AllInOne
+        import allinone
+        from allinone import interface
+        all_in_one_dir = join(self.basepath, 'allinone')
+        plugnplay.set_plugin_dirs(all_in_one_dir)
+        plugnplay.load_plugins()
+
+        self.assertEquals(len(AllInOne.implementors()), 1)
+        self.assertEquals(len(allinone.interface.AllInOne.implementors()), 1)
+        self.assertEquals(len(interface.AllInOne.implementors()), 1)
