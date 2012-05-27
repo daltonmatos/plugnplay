@@ -95,6 +95,34 @@ def _is_python_package(path):
     return exists(join(path, '__init__.py'))
 
 
+def _import_from_python_package(package_module, module):
+    imported_module = __import__(package_module, globals=globals(), \
+        locals=locals(), fromlist=[module])
+    del sys.modules[package_module]
+    return imported_module
+
+
+def _import_directly(mod_name):
+    imported_module = __import__(mod_name, globals=globals(), \
+            locals=locals())
+    del sys.modules[mod_name]
+    return imported_module
+
+
+def _import_module(d, mod_name, logger=None):
+    try:
+        if _is_python_package(d):
+            _mod_name = "{0}.{1}".format(basename(d), mod_name)
+            imported_module = _import_from_python_package(_mod_name, mod_name)
+        else:
+            imported_module = _import_directly(mod_name)
+
+        sys.modules[normalize_path(d) + "." + mod_name] = imported_module
+    except:
+        if logger:
+            logger.debug("Error loading plugin: {0}".format(mod_name), exc_info=sys.exc_info())
+
+
 def load_plugins(logger=None):
     '''
     The logger is any object with a "debug" method. Compatible
@@ -105,22 +133,10 @@ def load_plugins(logger=None):
             sys.path.insert(0, d)
         else:
             sys.path.insert(0, dirname(d))
+
         py_files = glob(join(d, '*.py'))
 
         #Remove ".py" for proper importing
-        modules = [basename(filename[:-3]) for filename in py_files if not basename(filename).startswith("__init__")]
+        modules = [basename(filename[:-3]) for filename in py_files]
         for mod_name in modules:
-            try:
-                if _is_python_package(d):
-                    _mod_name = "{0}.{1}".format(basename(d), mod_name)
-                    imported_module = __import__(_mod_name, globals=globals(), \
-                        locals=locals(), fromlist=[mod_name])
-                    del sys.modules[_mod_name]
-                else:
-                    imported_module = __import__(mod_name, globals=globals(), \
-                        locals=locals())
-                    del sys.modules[mod_name]
-                sys.modules[normalize_path(d) + "." + mod_name] = imported_module
-            except:
-                if logger:
-                    logger.debug("Error loading plugin: {0}".format(mod_name), exc_info=sys.exc_info())
+            _import_module(d, mod_name, logger=logger)
