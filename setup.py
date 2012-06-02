@@ -1,6 +1,10 @@
 # encoding: utf-8
 from setuptools import setup
 from plugnplay import __version__
+import os
+
+BASE_PATH = os.path.dirname(__file__)
+
 
 setup(
   name="plugnplay",
@@ -10,7 +14,7 @@ setup(
   description="A Generic plug-in system for python",
   author="Dalton Barreto",
   author_email="daltonmatos@gmail.com",
-  long_description=open('README.rst').read(),
+  long_description=open(os.path.join(BASE_PATH, 'README.rst')).read(),
   packages=['plugnplay'],
   classifiers=[
     "License :: OSI Approved :: GNU General Public License (GPL)",
