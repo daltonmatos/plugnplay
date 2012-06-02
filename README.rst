@@ -70,6 +70,11 @@ And an example of one such listener would be:
           # Do something very useful! =)
 
 
+New in version 0.4.2
+********************
+
+Small fix when installing plugnplay. The README.rst file was not being included in th final sdist package.
+
 New in version 0.4.1
 ********************
 
