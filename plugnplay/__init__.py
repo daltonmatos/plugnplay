@@ -136,6 +136,8 @@ def _append_dir(h, key, value):
 def _collect_plugins():
     '''
      Collect all plugin names, in alphabetical order among all plugin dirs.
+     Each element is a string with full path (including filename) of a plugin
+     to be loaded.
     '''
 
     file_names = []
@@ -164,9 +166,8 @@ def load_plugins(logger=None):
         else:
             sys.path.insert(0, dirname(d))
 
-        py_files = [basename(_d)]
+        py_file = basename(_d)
 
         # Remove ".py" for proper importing
-        modules = [basename(filename[:-3]) for filename in py_files]
-        for mod_name in modules:
-            _import_module(d, mod_name, logger=logger)
+        module = py_file[:-3]
+        _import_module(d, module, logger=logger)
