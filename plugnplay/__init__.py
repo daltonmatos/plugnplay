@@ -123,20 +123,51 @@ def _import_module(d, mod_name, logger=None):
             logger.debug("Error loading plugin: {0}".format(mod_name), exc_info=sys.exc_info())
 
 
+def _append_dir(h, key, value):
+    '''
+     Acumulate one more "value" in a list, if "h" already has "key"
+    '''
+    if key in h:
+        h[key] += [value]
+    else:
+        h[key] = [value]
+
+
+def _collect_plugins():
+    '''
+     Collect all plugin names, in alphabetical order among all plugin dirs.
+     Each element is a string with full path (including filename) of a plugin
+     to be loaded.
+    '''
+
+    file_names = []
+    dir_hash = {}
+    for d in plugin_dirs:
+        files = [basename(f) for f in glob(join(d, '*.py'))]
+        file_names += files
+        for f in files:
+            _append_dir(dir_hash, f, d)
+
+    for f in sorted(set(file_names)):
+        for d in dir_hash[f]:
+            yield join(d, f)
+
+
 def load_plugins(logger=None):
     '''
     The logger is any object with a "debug" method. Compatible
     with a logger as returned by the logging package.
     '''
-    for d in plugin_dirs:
+
+    for _d in _collect_plugins():
+        d = dirname(_d)
         if not _is_python_package(d):
             sys.path.insert(0, d)
         else:
             sys.path.insert(0, dirname(d))
 
-        py_files = glob(join(d, '*.py'))
+        py_file = basename(_d)
 
-        #Remove ".py" for proper importing
-        modules = [basename(filename[:-3]) for filename in py_files]
-        for mod_name in modules:
-            _import_module(d, mod_name, logger=logger)
+        # Remove ".py" for proper importing
+        module = py_file[:-3]
+        _import_module(d, module, logger=logger)
