@@ -124,6 +124,9 @@ def _import_module(d, mod_name, logger=None):
 
 
 def _append_dir(h, key, value):
+    '''
+     Acumulate one more "value" in a list, if "h" already has "key"
+    '''
     if key in h:
         h[key] += [value]
     else:
@@ -135,7 +138,6 @@ def _collect_plugins():
      Collect all plugin names, in alphabetical order among all plugin dirs.
     '''
 
-    plugins = []
     file_names = []
     dir_hash = {}
     for d in plugin_dirs:
@@ -145,9 +147,8 @@ def _collect_plugins():
             _append_dir(dir_hash, f, d)
 
     for f in sorted(set(file_names)):
-        plugins += [join(d, f) for d in dir_hash[f]]
-
-    return plugins
+        for d in dir_hash[f]:
+            yield join(d, f)
 
 
 def load_plugins(logger=None):
@@ -156,9 +157,7 @@ def load_plugins(logger=None):
     with a logger as returned by the logging package.
     '''
 
-    plugins = _collect_plugins()
-
-    for _d in plugins:
+    for _d in _collect_plugins():
         d = dirname(_d)
         if not _is_python_package(d):
             sys.path.insert(0, d)
