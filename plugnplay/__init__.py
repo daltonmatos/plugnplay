@@ -123,27 +123,40 @@ def _import_module(d, mod_name, logger=None):
             logger.debug("Error loading plugin: {0}".format(mod_name), exc_info=sys.exc_info())
 
 
+def _append_dir(h, key, value):
+    if key in h:
+        h[key] += [value]
+    else:
+        h[key] = [value]
+
+
+def _collect_plugins():
+    '''
+     Collect all plugin names, in alphabetical order among all plugin dirs.
+    '''
+
+    plugins = []
+    file_names = []
+    dir_hash = {}
+    for d in plugin_dirs:
+        files = [basename(f) for f in glob(join(d, '*.py'))]
+        file_names += files
+        for f in files:
+            _append_dir(dir_hash, f, d)
+
+    for f in sorted(set(file_names)):
+        plugins += [join(d, f) for d in dir_hash[f]]
+
+    return plugins
+
+
 def load_plugins(logger=None):
     '''
     The logger is any object with a "debug" method. Compatible
     with a logger as returned by the logging package.
     '''
-    # Collect all plugin names, in alphabetical order
-    plugins = []
-    sorted_names = []
-    dir_hash = {}
-    for d in plugin_dirs:
-        files = [basename(f) for f in glob(join(d, '*.py'))]
-        sorted_names += files
-        for f in files:
-            if f in dir_hash:
-                dir_hash[f] += [d]
-            else:
-                dir_hash[f] = [d]
 
-    for f in sorted(set(sorted_names)):
-        for d in dir_hash[f]:
-            plugins.append(join(d, f))
+    plugins = _collect_plugins()
 
     for _d in plugins:
         d = dirname(_d)
