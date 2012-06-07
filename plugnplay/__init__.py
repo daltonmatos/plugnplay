@@ -128,15 +128,33 @@ def load_plugins(logger=None):
     The logger is any object with a "debug" method. Compatible
     with a logger as returned by the logging package.
     '''
+    # Collect all plugin names, in alphabetical order
+    plugins = []
+    sorted_names = []
+    dir_hash = {}
     for d in plugin_dirs:
+        files = [basename(f) for f in glob(join(d, '*.py'))]
+        sorted_names += files
+        for f in files:
+            if f in dir_hash:
+                dir_hash[f] += [d]
+            else:
+                dir_hash[f] = [d]
+
+    for f in sorted(set(sorted_names)):
+        for d in dir_hash[f]:
+            plugins.append(join(d, f))
+
+    for _d in plugins:
+        d = dirname(_d)
         if not _is_python_package(d):
             sys.path.insert(0, d)
         else:
             sys.path.insert(0, dirname(d))
 
-        py_files = glob(join(d, '*.py'))
+        py_files = [basename(_d)]
 
-        #Remove ".py" for proper importing
+        # Remove ".py" for proper importing
         modules = [basename(filename[:-3]) for filename in py_files]
         for mod_name in modules:
             _import_module(d, mod_name, logger=logger)
