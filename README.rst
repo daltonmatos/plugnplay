@@ -70,6 +70,26 @@ And an example of one such listener would be:
           # Do something very useful! =)
 
 
+New in version 0.4.3
+********************
+
+Fixed issue #5: Now all plugins are loaded in alphabetical order. The sorting is made among all plugin filenames in all plugin dirs that were added with ``set_plugin_dirs()`` function. As an example, consider this plugindirs structure:
+
+::
+
+    myplugins/
+    |-- dir1
+    |   |-- aplug.py
+    |   `-- cplug.py
+    |-- dir2
+    |   |-- bplug.py
+    |   |-- dplug.py
+    |   `-- pplug.py
+    `-- aplug.py
+    `-- zplug.py
+
+Assuming you added your plugin folders in this order: ``myplugins, myplugins/dir1`` and ``myplugins/dir2``, your plugins will be loaded in this order: ``aplug.py, dir1/aplug.py, dir2/bplug.by, dir1/cplug.py, dir2/dplug.py, dir2/pplug.py, zplug.py``. Not that this **does not** dictates the order of execution of the implementors of a given interface (when you call ``MyInterface.implementors()``).
+
 New in version 0.4.2
 ********************
 
