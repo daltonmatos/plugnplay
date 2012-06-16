@@ -90,6 +90,31 @@ Fixed issue #5: Now all plugins are loaded in alphabetical order. The sorting is
 
 Assuming you added your plugin folders in this order: ``myplugins, myplugins/dir1`` and ``myplugins/dir2``, your plugins will be loaded in this order: ``aplug.py, dir1/aplug.py, dir2/bplug.by, dir1/cplug.py, dir2/dplug.py, dir2/pplug.py, zplug.py``. Not that this **does not** dictates the order of execution of the implementors of a given interface (when you call ``MyInterface.implementors()``).
 
+New in version -next-
+*********************
+
+``MyInterface.implementors()`` now can receive a callback function and any number of arguments or keyword arguments. This callback will be called for each implementor and only implementors for which ``callback(implementor)`` returns ``True``. Any extra arguments passed to ``MyInterface.implementors()`` will be passed through the callback. Here is a Simple example:
+
+::
+
+    class MyInterface(plugnplay.Interface):
+      pass
+
+    class ImplementorOne(plugnplay.Plugin):
+      implements = [MyInterface, ]
+
+    class ImplementorFour(plugnplay.Plugin):
+      implements = [MyInterface, ]
+
+    # The filter callback function
+    def _filter_implementors(implementor, name_size=15):
+      return len(implementor.__class__.__name__) == name_size
+
+    filtered_implementors = MyInterface.implementors(_filter_implementors, name_size=14)
+    filtered_implementors_1 = MyInterface.implementors(_filter_implementors, 14)
+
+In this case, both ``filtered_implementors`` and ``filtered_implementors_1`` will be the same: It will be a ``list`` containing an instance of ``ImplementorOne``. Since the example callback has a keyword argument we can also call ``MyInterface.implementors(_filter_implementors)`` and you will have a list returned with an instance of ``ImplementorFour``.
+
 New in version 0.4.2
 ********************
 
