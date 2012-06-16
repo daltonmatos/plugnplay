@@ -1,6 +1,6 @@
 # encoding: utf-8
 import unittest
-from plugnplay import Manager, Interface
+from plugnplay import Manager, Interface, Plugin
 
 
 class SomeInterface(Interface):
@@ -64,3 +64,24 @@ class FilteredImplementorsTest(unittest.TestCase):
 
         # Test the filter that filters-out all implementors
         assert 0 == len(self.man.implementors(SomeInterface, _simple_callback_filter_all_implementors))
+
+    def test_filter_with_parameters(self):
+        class MyInterface(Interface):
+            pass
+
+        class A(Plugin):
+            implements = [MyInterface, ]
+
+        class AB(Plugin):
+            implements = [MyInterface, ]
+
+        class AC(Plugin):
+            implements = [MyInterface, ]
+
+        def _filter_with_arguments(implementor, size=1):
+            return len(implementor.__class__.__name__) == size
+
+        assert 3 == len(MyInterface.implementors())
+        assert 2 == len(MyInterface.implementors(filter_callback=_filter_with_arguments, size=2))
+        assert 2 == len(MyInterface.implementors(_filter_with_arguments, 2))
+        assert 1 == len(MyInterface.implementors(_filter_with_arguments))

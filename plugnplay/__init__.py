@@ -70,8 +70,8 @@ class PluginMeta(type):
 
 
 @classmethod
-def implementors(cls, filter_callback=None):
-    return man.implementors(cls, filter_callback=filter_callback)
+def implementors(cls, filter_callback=None, *args, **kwargs):
+    return man.implementors(cls, filter_callback, *args, **kwargs)
 
 # Yes, it's not pretty but works at the same time with
 # python2 and python3.
