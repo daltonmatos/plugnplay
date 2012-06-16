@@ -50,6 +50,10 @@ class FilteredImplementorsTest(unittest.TestCase):
     def test_simple_call_back_no_parameters(self):
         def _simple_callback_filter(implementor):
             return implementor.__class__.__name__.endswith("A")
+
+        def _simple_callback_filter_all_implementors(implementor):
+            return False
+
         implementor_a = PlugA()
         self.man.add_implementor(SomeInterface, implementor_a)
         self.man.add_implementor(SomeInterface, PlugB())
@@ -57,3 +61,6 @@ class FilteredImplementorsTest(unittest.TestCase):
         filtered_implementors = self.man.implementors(SomeInterface, _simple_callback_filter)
         assert 1 == len(filtered_implementors)
         assert [implementor_a] == filtered_implementors
+
+        # Test the filter that filters-out all implementors
+        assert 0 == len(self.man.implementors(SomeInterface, _simple_callback_filter_all_implementors))
