@@ -40,3 +40,20 @@ class ManagerTest(unittest.TestCase):
     '''
     def test_return_empty_list_of_implementors(self):
         self.assertEquals(0, len(self.man.implementors(SomeInterface)))
+
+
+class FilteredImplementorsTest(unittest.TestCase):
+
+    def setUp(self):
+        self.man = Manager()
+
+    def test_simple_call_back_no_parameters(self):
+        def _simple_callback_filter(implementor):
+            return implementor.__class__.__name__.endswith("A")
+        implementor_a = PlugA()
+        self.man.add_implementor(SomeInterface, implementor_a)
+        self.man.add_implementor(SomeInterface, PlugB())
+        assert 2 == len(self.man.implementors(SomeInterface))
+        filtered_implementors = self.man.implementors(SomeInterface, _simple_callback_filter)
+        assert 1 == len(filtered_implementors)
+        assert [implementor_a] == filtered_implementors
