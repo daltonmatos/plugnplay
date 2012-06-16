@@ -35,7 +35,7 @@ class ManagerTest(unittest.TestCase):
         self.assertEquals(2, len(self.man.implementors(SomeInterface)))
 
     '''
-        The list of implementors of a Interface should be empty if it has nos
+        The list of implementors of an Interface should be empty if it has no
         implementors yet.
     '''
     def test_return_empty_list_of_implementors(self):

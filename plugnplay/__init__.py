@@ -73,7 +73,7 @@ class PluginMeta(type):
 def implementors(cls, filter_callback=None):
     return man.implementors(cls, filter_callback=filter_callback)
 
-# Yes, it's not pretty but works ate the same time with
+# Yes, it's not pretty but works at the same time with
 # python2 and python3.
 Plugin = PluginMeta('Plugin', (object, ), {})
 Interface = InterfaceMeta('Interface', (object, ), {'implementors': implementors})
