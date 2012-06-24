@@ -135,3 +135,20 @@ class LoadingTest(unittest.TestCase):
                     mock.call(base_dir, 'zplug', logger=None),
                     ]
             assert call_list == import_mock.call_args_list
+
+    def test_load_filtered_implementors(self):
+        class MyInterface(plugnplay.Interface):
+            pass
+
+        class FirstImplementor(plugnplay.Plugin):
+            implements = [MyInterface, ]
+
+        class SecondImplementor(plugnplay.Plugin):
+            implements = [MyInterface, ]
+
+        def _filter_first_implementor(implementor):
+            return implementor.__class__.__name__ == 'FirstImplementor'
+
+        filtered_implementor = MyInterface.implementors(_filter_first_implementor)
+        assert 1 == len(filtered_implementor)
+        assert [plugnplay.man.iface_implementors.get(MyInterface)[0]] == filtered_implementor
