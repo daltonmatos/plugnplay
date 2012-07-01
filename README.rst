@@ -94,6 +94,10 @@ New in version -next-
 
 In this case, both ``filtered_implementors`` and ``filtered_implementors_1`` will be the same: It will be a ``list`` containing an instance of ``ImplementorOne``. Since the example callback has a keyword argument we can also call ``MyInterface.implementors(_filter_implementors)`` and you will have a list returned with an instance of ``ImplementorFour``.
 
+
+Fix issue #13. Plugnplay should create instances only of classes which implements at least one ``plugnplay.Interface``.
+
+
 New in version 0.4.3
 ********************
 
