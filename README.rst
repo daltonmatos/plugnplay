@@ -75,7 +75,7 @@ New in version -next-
 Features
 --------
 
-``MyInterface.implementors()`` now can receive a callback function and any number of arguments or keyword arguments. This callback will be called for each implementor and only implementors for which ``callback(implementor)`` returns ``True``. Any extra arguments passed to ``MyInterface.implementors()`` will be passed through the callback. Here is a Simple example:
+``MyInterface.implementors()`` now can receive a callback function and any number of arguments or keyword arguments. This callback will be called for each implementor, only implementors for which ``callback(implementor)`` returns ``True`` will be included on the resulting filtered list. Any extra arguments passed to ``MyInterface.implementors()`` will be passed through to the callback function. Here is a Simple example:
 
 ::
 
