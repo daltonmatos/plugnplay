@@ -100,11 +100,6 @@ In this case, both ``filtered_implementors`` and ``filtered_implementors_1`` wil
 Fixes
 -----
  * Fix issue #5. Every time plugnplay load the same set of plugins, all plugins are now loaded in a consistent order.
- * Fix issue #13. Plugnplay should create instances only of classes which implements at least one ``plugnplay.Interface``.
-
-
-New in version 0.4.3
-********************
 
 Fixed issue #5: Now all plugins are loaded in alphabetical order. The sorting is made among all plugin filenames in all plugin dirs that were added with ``set_plugin_dirs()`` function. As an example, consider this plugindirs structure:
 
@@ -123,6 +118,7 @@ Fixed issue #5: Now all plugins are loaded in alphabetical order. The sorting is
 
 Assuming you added your plugin folders in this order: ``myplugins, myplugins/dir1`` and ``myplugins/dir2``, your plugins will be loaded in this order: ``aplug.py, dir1/aplug.py, dir2/bplug.by, dir1/cplug.py, dir2/dplug.py, dir2/pplug.py, zplug.py``. Not that this **does not** dictates the order of execution of the implementors of a given interface (when you call ``MyInterface.implementors()``).
 
+ * Fix issue #13. Plugnplay should create instances only of classes which implements at least one ``plugnplay.Interface``.
 
 New in version 0.4.2
 ********************
