@@ -99,7 +99,6 @@ In this case, both ``filtered_implementors`` and ``filtered_implementors_1`` wil
 
 Fixes
 -----
- * Fix issue #5. Every time plugnplay load the same set of plugins, all plugins are now loaded in a consistent order.
 
 Fixed issue #5: Now all plugins are loaded in alphabetical order. The sorting is made among all plugin filenames in all plugin dirs that were added with ``set_plugin_dirs()`` function. As an example, consider this plugindirs structure:
 
