@@ -2,6 +2,7 @@ import unittest
 import plugnplay
 from os.path import dirname, join, abspath
 from mock import Mock
+import mock
 import sys
 
 
@@ -111,3 +112,43 @@ class LoadingTest(unittest.TestCase):
         self.assertEquals(len(AllInOne.implementors()), 1)
         self.assertEquals(len(allinone.interface.AllInOne.implementors()), 1)
         self.assertEquals(len(interface.AllInOne.implementors()), 1)
+
+    def test_load_plugins_in_alphabetical_order(self):
+        import os
+        base_dir = os.path.join(self.basepath, 'sortedloading')
+        dir1 = os.path.join(base_dir, 'dir1')
+        dir2 = os.path.join(base_dir, 'dir2')
+        dirs = [base_dir, dir1, dir2]
+
+        plugnplay.set_plugin_dirs(*dirs)
+        with mock.patch('plugnplay._import_module') as import_mock:
+            plugnplay.load_plugins()
+            assert 7 == import_mock.call_count
+            #``aplug.py, dir1/aplug.py, dir2/bplug.by, dir1/cplug.py, dir2/dplug.py, dir2/pplug.py, zplug.py``
+            call_list = [
+                    mock.call(base_dir, 'aplug', logger=None),
+                    mock.call(dir1, 'aplug', logger=None),
+                    mock.call(dir2, 'bplug', logger=None),
+                    mock.call(dir1, 'cplug', logger=None),
+                    mock.call(dir2, 'dplug', logger=None),
+                    mock.call(dir2, 'pplug', logger=None),
+                    mock.call(base_dir, 'zplug', logger=None),
+                    ]
+            assert call_list == import_mock.call_args_list
+
+    def test_load_filtered_implementors(self):
+        class MyInterface(plugnplay.Interface):
+            pass
+
+        class FirstImplementor(plugnplay.Plugin):
+            implements = [MyInterface, ]
+
+        class SecondImplementor(plugnplay.Plugin):
+            implements = [MyInterface, ]
+
+        def _filter_first_implementor(implementor):
+            return implementor.__class__.__name__ == 'FirstImplementor'
+
+        filtered_implementor = MyInterface.implementors(_filter_first_implementor)
+        assert 1 == len(filtered_implementor)
+        assert [plugnplay.man.iface_implementors.get(MyInterface)[0]] == filtered_implementor

@@ -69,6 +69,65 @@ And an example of one such listener would be:
         if md5_1 is not md5_2:
           # Do something very useful! =)
 
+New in version 0.5.0
+********************
+
+Features
+--------
+
+``MyInterface.implementors()`` now can receive a callback function and any number of arguments or keyword arguments. This callback will be called for each implementor, only implementors for which ``callback(implementor)`` returns ``True`` will be included on the resulting filtered list. Any extra arguments passed to ``MyInterface.implementors()`` will be passed through to the callback function. Here is a Simple example:
+
+::
+
+    class MyInterface(plugnplay.Interface):
+      pass
+
+    class ImplementorOne(plugnplay.Plugin):
+      implements = [MyInterface, ]
+
+    class ImplementorFour(plugnplay.Plugin):
+      implements = [MyInterface, ]
+
+    # The filter callback function
+    def _filter_implementors(implementor, name_size=15):
+      return len(implementor.__class__.__name__) == name_size
+
+    filtered_implementors = MyInterface.implementors(_filter_implementors, name_size=14)
+    filtered_implementors_1 = MyInterface.implementors(_filter_implementors, 14)
+
+In this case, both ``filtered_implementors`` and ``filtered_implementors_1`` will be the same: It will be a ``list`` containing an instance of ``ImplementorOne``. Since the example callback has a keyword argument we can also call ``MyInterface.implementors(_filter_implementors)`` and you will have a list returned with an instance of ``ImplementorFour``.
+
+Fixes
+-----
+ * Fix issue #5. Every time plugnplay load the same set of plugins, all plugins are now loaded in a consistent order.
+ * Fix issue #13. Plugnplay should create instances only of classes which implements at least one ``plugnplay.Interface``.
+
+
+New in version 0.4.3
+********************
+
+Fixed issue #5: Now all plugins are loaded in alphabetical order. The sorting is made among all plugin filenames in all plugin dirs that were added with ``set_plugin_dirs()`` function. As an example, consider this plugindirs structure:
+
+::
+
+    myplugins/
+    |-- dir1
+    |   |-- aplug.py
+    |   `-- cplug.py
+    |-- dir2
+    |   |-- bplug.py
+    |   |-- dplug.py
+    |   `-- pplug.py
+    `-- aplug.py
+    `-- zplug.py
+
+Assuming you added your plugin folders in this order: ``myplugins, myplugins/dir1`` and ``myplugins/dir2``, your plugins will be loaded in this order: ``aplug.py, dir1/aplug.py, dir2/bplug.by, dir1/cplug.py, dir2/dplug.py, dir2/pplug.py, zplug.py``. Not that this **does not** dictates the order of execution of the implementors of a given interface (when you call ``MyInterface.implementors()``).
+
+
+New in version 0.4.2
+********************
+
+Small fix when installing plugnplay. The README.rst file was not being included in th final sdist package.
 
 New in version 0.4.1
 ********************

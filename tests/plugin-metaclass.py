@@ -1,68 +1,87 @@
 # coding: utf-8
-
-
 import unittest
 from plugnplay import Interface, Plugin, Manager
 import plugnplay
+import mock
+
 
 class SomeInterface(Interface):
-  def method(self):
-    pass
+    def method(self):
+        pass
+
 
 class SomeInterfaceB(Interface):
-  def method_b(self):
-    pass
+    def method_b(self):
+        pass
 
 
 class PluginMetaTest(unittest.TestCase):
 
+    def setUp(self):
+        # Refresh the registry
+        plugnplay.man = Manager()
 
-  def setUp(self):
-    # Refresh the registry
-    plugnplay.man = Manager()
+    def test_register_class_that_implements_one_or_more_interfaces(self):
+        class SomePlugin(Plugin):
+            implements = [SomeInterface]
 
-  def test_register_class_that_implements_one_or_more_interfaces(self):
-    class SomePlugin(Plugin):
-      implements = [SomeInterface]
+            def method(self):
+                pass
+        self.assertEquals(1, len(SomeInterface.implementors()))
+        self.assertTrue(isinstance(SomeInterface.implementors()[0], SomePlugin))
 
-      def method(self):
-        pass
-    self.assertEquals(1, len(SomeInterface.implementors()))
-    self.assertTrue(isinstance(SomeInterface.implementors()[0], SomePlugin))
+    def test_register_class_that_implements_more_than_one_interface(self):
+        class PluginFoo(Plugin):
+            implements = [SomeInterface, SomeInterfaceB]
 
-  def test_register_class_that_implements_more_than_one_interface(self):
-    class PluginFoo(Plugin):
-      implements = [SomeInterface, SomeInterfaceB]
-      
-      # SomeInterface
-      def method(self):
-        pass
+            # SomeInterface
+            def method(self):
+                pass
 
-      # SomeInterfaceB
-      def method_b(self):
-        pass
+            # SomeInterfaceB
+            def method_b(self):
+                pass
 
+        self.assertEquals(1, len(SomeInterface.implementors()))
+        self.assertEquals(1, len(SomeInterfaceB.implementors()))
 
-    self.assertEquals(1, len(SomeInterface.implementors()))
-    self.assertEquals(1, len(SomeInterfaceB.implementors()))
+        self.assertTrue(isinstance(SomeInterface.implementors()[0], PluginFoo))
+        self.assertTrue(isinstance(SomeInterfaceB.implementors()[0], PluginFoo))
 
-    self.assertTrue(isinstance(SomeInterface.implementors()[0], PluginFoo))
-    self.assertTrue(isinstance(SomeInterfaceB.implementors()[0], PluginFoo))
+    def test_one_interface_implemented_by_two_plugins(self):
+        class PlugA(Plugin):
+            implements = [SomeInterface]
 
+            def method(self):
+                pass
 
-  def test_one_interface_implemented_by_two_plugins(self):
-    class PlugA(Plugin):
-      implements = [SomeInterface]
+        class PlugB(Plugin):
+            implements = [SomeInterface]
 
-      def method(self):
-        pass
+            def method(self):
+                pass
 
-    class PlugB(Plugin):
-      implements = [SomeInterface]
+        self.assertEquals(2, len(SomeInterface.implementors()))
+        self.assertTrue(isinstance(SomeInterface.implementors()[0], PlugA))
+        self.assertTrue(isinstance(SomeInterface.implementors()[1], PlugB))
 
-      def method(self):
-        pass
+    def test_call_init_only_for_implementors(self):
+        checkpoint = mock.Mock()
 
-    self.assertEquals(2, len(SomeInterface.implementors()))
-    self.assertTrue(isinstance(SomeInterface.implementors()[0], PlugA))
-    self.assertTrue(isinstance(SomeInterface.implementors()[1], PlugB))
+        class MyPlugin(Plugin):
+            def __init__(self):
+                checkpoint()
+
+        class MyIface(Interface):
+            pass
+
+        class OnePlugin(MyPlugin):
+            implements = [MyIface, ]
+
+        class OtherPlugin(MyPlugin):
+            pass
+
+        class YetAnotherPlugin(MyPlugin):
+            implements = [MyIface, ]
+
+        assert 2 == checkpoint.call_count
