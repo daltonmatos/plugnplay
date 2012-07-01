@@ -72,6 +72,9 @@ And an example of one such listener would be:
 New in version -next-
 *********************
 
+Features
+--------
+
 ``MyInterface.implementors()`` now can receive a callback function and any number of arguments or keyword arguments. This callback will be called for each implementor and only implementors for which ``callback(implementor)`` returns ``True``. Any extra arguments passed to ``MyInterface.implementors()`` will be passed through the callback. Here is a Simple example:
 
 ::
@@ -94,8 +97,10 @@ New in version -next-
 
 In this case, both ``filtered_implementors`` and ``filtered_implementors_1`` will be the same: It will be a ``list`` containing an instance of ``ImplementorOne``. Since the example callback has a keyword argument we can also call ``MyInterface.implementors(_filter_implementors)`` and you will have a list returned with an instance of ``ImplementorFour``.
 
-
-Fix issue #13. Plugnplay should create instances only of classes which implements at least one ``plugnplay.Interface``.
+Fixes
+-----
+ * Fix issue #5. Every time plugnplay load the same set of plugins, all plugins are now loaded in a consistent order.
+ * Fix issue #13. Plugnplay should create instances only of classes which implements at least one ``plugnplay.Interface``.
 
 
 New in version 0.4.3
