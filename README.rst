@@ -69,8 +69,8 @@ And an example of one such listener would be:
         if md5_1 is not md5_2:
           # Do something very useful! =)
 
-New in version -next-
-*********************
+New in version 0.5.0
+********************
 
 Features
 --------
