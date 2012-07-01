@@ -61,8 +61,8 @@ class PluginMeta(type):
         new_class = super(PluginMeta, metaclass).__new__(metaclass, classname, \
             bases, attrs)
 
-        new_class_instance = new_class()
         if 'implements' in attrs:
+            new_class_instance = new_class()
             for interface in attrs['implements']:
                 man.add_implementor(interface, new_class_instance)
 
