@@ -2,6 +2,7 @@
 import unittest
 from plugnplay import Interface, Plugin, Manager
 import plugnplay
+import mock
 
 
 class SomeInterface(Interface):
@@ -63,3 +64,24 @@ class PluginMetaTest(unittest.TestCase):
         self.assertEquals(2, len(SomeInterface.implementors()))
         self.assertTrue(isinstance(SomeInterface.implementors()[0], PlugA))
         self.assertTrue(isinstance(SomeInterface.implementors()[1], PlugB))
+
+    def test_call_init_only_for_implementors(self):
+        checkpoint = mock.Mock()
+
+        class MyPlugin(Plugin):
+            def __init__(self):
+                checkpoint()
+
+        class MyIface(Interface):
+            pass
+
+        class OnePlugin(MyPlugin):
+            implements = [MyIface, ]
+
+        class OtherPlugin(MyPlugin):
+            pass
+
+        class YetAnotherPlugin(MyPlugin):
+            implements = [MyIface, ]
+
+        assert 2 == checkpoint.call_count
