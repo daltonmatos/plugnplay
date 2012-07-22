@@ -9,7 +9,7 @@ from .manager import Manager
 __version__ = "0.5.0"
 
 __all__ = ['Interface', 'Plugin']
-
+PNP_SYS_MODULES_PREFIX = 'pnp'
 
 man = Manager()
 
@@ -87,7 +87,8 @@ def set_plugin_dirs(*dirs):
 def normalize_path(path):
     if path:
         parts = filter(None, path.replace('.', '').split('/'))
-        return '.'.join(parts)
+        # Prefix all modules imported by plugnplay with a common value
+        return '.'.join([PNP_SYS_MODULES_PREFIX] + parts)
     return None
 
 
