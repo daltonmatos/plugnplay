@@ -161,9 +161,9 @@ def load_plugins(logger=None):
 
     for _d in _collect_plugins():
         d = dirname(_d)
-        if not _is_python_package(d):
+        if not _is_python_package(d) and d not in sys.path:
             sys.path.insert(0, d)
-        else:
+        elif dirname(d) not in sys.path:
             sys.path.insert(0, dirname(d))
 
         py_file = basename(_d)
