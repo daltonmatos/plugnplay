@@ -50,12 +50,6 @@ class LoadingTest(unittest.TestCase):
         self.assertTrue('myplugin' not in sys.modules)
         self.assertTrue(plugnplay.normalize_path(plugindir) + '.otherplug' in sys.modules)
 
-    def test_normalize_path(self):
-        self.assertEquals('some.module.path', plugnplay.normalize_path('/some/module/path'))
-        self.assertEquals('other.module.path', plugnplay.normalize_path('./other/module/path'))
-        self.assertEquals('some.module.path', plugnplay.normalize_path('../..//some//module/path'))
-        self.assertEquals('some.module.path', plugnplay.normalize_path('/some/../module/path/'))
-
     def test_load_same_name_different_folders(self):
         import sys
         dir1 = join(self.basepath, 'plugin/dir1')

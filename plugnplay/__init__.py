@@ -6,10 +6,10 @@ from types import FunctionType
 
 from .manager import Manager
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 
 __all__ = ['Interface', 'Plugin']
-
+PNP_SYS_MODULES_PREFIX = 'pnp'
 
 man = Manager()
 
@@ -87,7 +87,8 @@ def set_plugin_dirs(*dirs):
 def normalize_path(path):
     if path:
         parts = filter(None, path.replace('.', '').split('/'))
-        return '.'.join(parts)
+        # Prefix all modules imported by plugnplay with a common value
+        return '.'.join([PNP_SYS_MODULES_PREFIX] + parts)
     return None
 
 
@@ -161,9 +162,9 @@ def load_plugins(logger=None):
 
     for _d in _collect_plugins():
         d = dirname(_d)
-        if not _is_python_package(d):
+        if not _is_python_package(d) and d not in sys.path:
             sys.path.insert(0, d)
-        else:
+        elif dirname(d) not in sys.path:
             sys.path.insert(0, dirname(d))
 
         py_file = basename(_d)

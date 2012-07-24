@@ -69,6 +69,17 @@ And an example of one such listener would be:
         if md5_1 is not md5_2:
           # Do something very useful! =)
 
+
+New in version 0.5.1
+********************
+
+
+Fixes
+-----
+
+Fix for issue #14 where plugnplay was getting in the way of the python interperter. Now all modules loaded dinamically by plugnplay are prefixed with "pnp." when added to ``sys.modules``.
+
+
 New in version 0.5.0
 ********************
 
