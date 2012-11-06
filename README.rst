@@ -70,6 +70,18 @@ And an example of one such listener would be:
           # Do something very useful! =)
 
 
+New in version 0.5.2
+********************
+
+Fixes
+-----
+
+ * Issue [#16](https://github.com/daltonmatos/plugnplay/issues/16) - [Python 3.2] Unable to install 0.5.1 via pip or setup.py
+ * Issue [#18](https://github.com/daltonmatos/plugnplay/issues/18) - Incompatibility with py3k filter() function
+
+
+
+
 New in version 0.5.1
 ********************
 

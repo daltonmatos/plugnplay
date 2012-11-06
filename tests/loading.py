@@ -64,11 +64,9 @@ class LoadingTest(unittest.TestCase):
         self.assertTrue(dir2_norm + '.otherplugin' in sys.modules)
 
         mod1 = sys.modules[dir1_norm + '.otherplugin']
-        print mod1
         self.assertTrue(mod1.MyPlugin.dir1)
 
         mod2 = sys.modules[dir2_norm + '.otherplugin']
-        print mod2
         self.assertTrue(mod2.MyPlugin.dir2)
 
     def test_find_implementors_different_import(self):
