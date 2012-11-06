@@ -87,7 +87,8 @@ def set_plugin_dirs(*dirs):
 
 def normalize_path(path):
     if path:
-        parts = filter(None, path.replace('.', '').split('/'))
+        _parts = filter(None, path.replace('.', '').split('/'))
+        parts = [p for p in _parts]  # Exhaust the generator, returned by py3k's filter() function
         # Prefix all modules imported by plugnplay with a common value
         return '.'.join([PNP_SYS_MODULES_PREFIX] + parts)
     return None
