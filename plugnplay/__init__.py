@@ -39,7 +39,8 @@ class InterfaceMeta(type):
 
     def __new__(metaclass, classname, bases, attrs):
         new_class = super(InterfaceMeta, metaclass).__new__(metaclass, classname, bases, attrs)
-        for k, v in new_class.__dict__.iteritems():
+        for k in new_class.__dict__:
+            v = new_class.__dict__[k]
             if _is_method(v):
                 setattr(new_class, k, classmethod(method_name(k)))
 
