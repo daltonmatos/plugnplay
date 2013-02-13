@@ -9,7 +9,9 @@ Welcome to plugnplay's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 0
+
+   intro.rst
 
 Indices and tables
 ==================
