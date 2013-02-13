@@ -11,12 +11,6 @@ Contents:
 .. toctree::
    :maxdepth: 0
 
-   intro.rst
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   intro
+   usage
 
