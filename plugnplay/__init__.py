@@ -79,6 +79,14 @@ def implementors(cls, filter_callback=None, *args, **kwargs):
 Plugin = PluginMeta('Plugin', (object, ), {})
 Interface = InterfaceMeta('Interface', (object, ), {'implementors': implementors})
 
+Interface.__doc__ = """
+    Marker superclass for interfaces.
+
+    All interfaces that you want to make plugable must inherit from this class. Your interfaces are pure
+    documentational. All methods defined in your interfaces will not me really called, all calls will be forwarded
+    to all your implementors.
+    """
+
 
 def set_plugin_dirs(*dirs):
     for d in dirs:
