@@ -17,7 +17,7 @@ plugin_dirs = []
 
 
 def _is_method(o):
-    return type(o) is FunctionType
+    return type(o) in (FunctionType, staticmethod)
 
 
 def method_name(method_name):
