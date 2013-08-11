@@ -12,6 +12,7 @@ A plugable interface is just a regular class that has :py:class:`plugnplay.Inter
       def one_method(self, a, b):
         pass
 
+
 This defines a plugnplay interface. It means that everytime you call ``MyInterface.one_method(1, 2)``, all implementors of this interface will have this same method called, in sequence.
 
 Note that this declaration is only a marker, the method of the ``MyInterface`` class **will not** be called, it's pure documentational, so whoever looks at this interface knows whitch methods they have to implement.
