@@ -6,8 +6,15 @@ Plugnlay (PnP) is a generic implementtion of the Observer pattern. With a very e
 
 To declare an interface and all observers of this interface you do not need to call any *register* method or anything like this. All you need to ensure is that the your obvservers are imported by your python interpreter. Since an observer implementation needs a reference to the interface it's implementing, the interface class is imported automatically.
 
+
+A note on plugin loading order
+******************************
+
+https://github.com/daltonmatos/plugnplay/issues/5
+
+
 A simple example
-================
+****************
 
 Here is a very simple example of what you need to do to declare an interface and implement an observer of this interface.
 

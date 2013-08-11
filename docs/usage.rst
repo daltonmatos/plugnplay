@@ -1,7 +1,11 @@
 
 
-Defining a Plugnplay Interface
-==============================
+Defining your Interfaces
+========================
+
+
+Declaring simple methods
+*************************
 
 A plugable interface is just a regular class that has :py:class:`plugnplay.Interface` as its superclass. Any method decalred in this class will be able to be used to call the interface implementors, eg:
 
@@ -17,7 +21,11 @@ This defines a plugnplay interface. It means that everytime you call ``MyInterfa
 
 Note that this declaration is only a marker, the method of the ``MyInterface`` class **will not** be called, it's pure documentational, so whoever looks at this interface knows whitch methods they have to implement.
 
-.. newinversion:: 0.5.3
+
+Using staticmethods
+*******************
+
+.. versionadded:: 0.5.3
 
 Any staticmethod will be also included as part of the interface declaration, so if you have an interface like this:
 

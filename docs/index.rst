@@ -13,3 +13,5 @@ Contents:
 
    intro
    usage
+   calling
+   changelog
