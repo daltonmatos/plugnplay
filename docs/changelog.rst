@@ -60,14 +60,14 @@ Fixed issue #5: Now all plugins are loaded in alphabetical order. The sorting is
     `-- aplug.py
     `-- zplug.py
 
-Assuming you added your plugin folders in this order: ``myplugins, myplugins/dir1`` and ``myplugins/dir2``, your plugins will be loaded in this order: ``aplug.py, dir1/aplug.py, dir2/bplug.by, dir1/cplug.py, dir2/dplug.py, dir2/pplug.py, zplug.py``. Not that this **does not** dictates the order of execution of the implementors of a given interface (when you call ``MyInterface.implementors()``).
+Assuming you added your plugin folders in this order: ``myplugins, myplugins/dir1`` and ``myplugins/dir2``, your plugins will be loaded in this order: ``aplug.py, dir1/aplug.py, dir2/bplug.by, dir1/cplug.py, dir2/dplug.py, dir2/pplug.py, zplug.py``. Note that this **does not** dictates the order of execution of the implementors of a given interface (when you call ``MyInterface.implementors()``).
 
  * Fix issue #13. Plugnplay should create instances only of classes which implements at least one ``plugnplay.Interface``.
 
 0.4.2
 *****
 
-Small fix when installing plugnplay. The README.rst file was not being included in th final sdist package.
+Small fix when installing plugnplay. The README.rst file was not being included in the final sdist package.
 
 0.4.1
 *****
