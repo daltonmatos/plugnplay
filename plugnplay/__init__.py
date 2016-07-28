@@ -6,7 +6,7 @@ from types import FunctionType
 
 from .manager import Manager
 
-__version__ = "0.5.2"
+__version__ = "0.5.3"
 
 __all__ = ['Interface', 'Plugin']
 PNP_SYS_MODULES_PREFIX = 'pnp'
@@ -17,7 +17,7 @@ plugin_dirs = []
 
 
 def _is_method(o):
-    return type(o) is FunctionType
+    return type(o) in (FunctionType, staticmethod)
 
 
 def method_name(method_name):
@@ -78,6 +78,14 @@ def implementors(cls, filter_callback=None, *args, **kwargs):
 # python2 and python3.
 Plugin = PluginMeta('Plugin', (object, ), {})
 Interface = InterfaceMeta('Interface', (object, ), {'implementors': implementors})
+
+Interface.__doc__ = """
+    Marker superclass for interfaces.
+
+    All interfaces that you want to make plugable must inherit from this class. Your interfaces are pure
+    documentational. All methods defined in your interfaces will not me really called, all calls will be forwarded
+    to all your implementors.
+    """
 
 
 def set_plugin_dirs(*dirs):
