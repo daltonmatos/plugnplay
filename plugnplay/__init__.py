@@ -1,12 +1,12 @@
 
+import sys
 from glob import glob
 from os.path import join, basename, exists, dirname
-import sys
 from types import FunctionType
 
 from .manager import Manager
 
-__version__ = "0.5.2"
+__version__ = "0.5.3"
 
 __all__ = ['Interface', 'Plugin']
 PNP_SYS_MODULES_PREFIX = 'pnp'

@@ -3,6 +3,10 @@
 Changelog
 =========
 
+0.5.3
+*****
+
+Add license file.
 
 0.5.2
 *****
@@ -80,7 +84,7 @@ More details: Issue #6 (https://github.com/daltonmatos/plugnplay/issues/6).
 
 Since plugnplay version 0.4 you can call your Interface method directly, like this:
 
-:: 
+::
 
     CopyListener.copy_finished(file1, file2)
 
